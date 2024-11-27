@@ -77,22 +77,8 @@ class CameraModel:
         translation_matrix[:3, 3] = translation_vector
 
         # Apply translation
-        self.extrinsic = self.extrinisic@translation_matrix
+        self.extrinsic = self.extrinsic@translation_matrix
 
-
-    def rotate(self, rotation_matrix):
-        """
-        Apply rotation (adjust orientation) to the camera extrinsic matrix.
-    
-        Parameters:
-            rotation_matrix (np.ndarray): A 3x3 rotation matrix.
-        """
-        # Create homogeneous rotation matrix
-        rotation_homogeneous = np.eye(4)
-        rotation_homogeneous[:3, :3] = rotation_matrix
-    
-        # Apply rotation (update orientation only)
-        self.extrinsic[:3, :3] = rotation_matrix @ self.extrinsic[:3, :3]
 
     def project(self, img_feature):
         """
@@ -107,8 +93,9 @@ class CameraModel:
         img_x, img_y = img_feature
 
         # Compute ray direction in 3D space
-        direction_x = (img_x - self.cx) * self.mx  # X direction
-        direction_y = (img_y - self.cy) * self.my  # Y direction
+        direction_x = (img_x - self.cx + 0.5) * self.mx  # X direction # 0.5 is pixel center
+        direction_y = (img_y - self.cy + 0.5) * self.my  # Y direction # 0.5 is pixel center
+
         direction_z = self.focal_length  # Z direction (camera optical axis)
 
         # Normalize to create a unit vector
