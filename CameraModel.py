@@ -77,7 +77,7 @@ class CameraModel:
         translation_matrix[:3, 3] = translation_vector
 
         # Apply translation
-        self.extrinsic = translation_matrix@translation_matrix
+        self.extrinsic = self.extrinisic@translation_matrix
 
 
     def rotate(self, rotation_matrix):
